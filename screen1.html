@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Экран 1 — Приглашение</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F4EFE6;
+    --ink:#2E2A24;
+    --ink-soft:#6B6255;
+    --pearl-edge:rgba(46,42,24,0.16);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{ height:100%; }
+  body{
+    font-family:'Poiret One', sans-serif;
+    font-weight:300;
+    color:var(--ink);
+    background:var(--cream);
+    overflow-x:hidden;
+    display:flex;
+    justify-content:center;
+  }
+  h1,h2{ font-family:'Poiret One', sans-serif; font-weight:400; line-height:1.15; }
+
+  /* ---- 4-колоночная мобильная сетка: контент ограничен по ширине как в макете ---- */
+  .screen{
+    width:100%;
+    max-width:420px;
+    min-height:100vh;
+    padding:8vh 24px 6vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    position:relative;
+  }
+
+  /* элементы появляются плавно по очереди при загрузке */
+  .reveal{
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity 0.9s ease, transform 0.9s cubic-bezier(.2,.8,.2,1);
+  }
+  .screen.loaded .reveal{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .screen.loaded .r1{ transition-delay:0.05s; }
+  .screen.loaded .r2{ transition-delay:0.25s; }
+  .screen.loaded .r3{ transition-delay:0.45s; }
+  .screen.loaded .r4{ transition-delay:0.65s; }
+  .screen.loaded .r5{ transition-delay:0.85s; }
+  .screen.loaded .r6{ transition-delay:1.05s; }
+  .screen.loaded .r7{ transition-delay:1.25s; }
+
+  /* ---- логотип + жемчуг по бокам ---- */
+  .logo-wrap{
+    position:relative;
+    width:100%;
+    padding-top:10px;
+    margin-bottom:6px;
+  }
+  .logo{
+    display:block;
+    width:100px;
+    max-width:70%;
+    height:auto;
+    margin:0 auto;
+    position:relative;
+    z-index:2;
+  }
+  .logo-flourish{
+    width:22px; height:14px;
+    margin:4px auto 0;
+    position:relative;
+    z-index:2;
+  }
+  .pearls-svg{
+    position:absolute;
+    top:-6px; left:50%;
+    transform:translateX(-50%);
+    width:340px;
+    max-width:90vw;
+    height:120px;
+    z-index:1;
+    pointer-events:none;
+  }
+
+  /* ---- приветствие ---- */
+  .greeting{
+    margin-top:56px;
+    font-size:clamp(1.5rem, 6vw, 1.8rem);
+    font-style:italic;
+    line-height:1.5;
+  }
+
+  /* ---- заголовок / подзаголовок письма ---- */
+  .letter-heading{
+    margin-top:52px;
+    font-size:clamp(1.8rem, 7vw, 2.2rem);
+  }
+  .letter-subheading{
+    margin-top:4px;
+    font-family:'Poiret One', sans-serif;
+    font-style:italic;
+    font-size:0.95rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---- конверт ---- */
+  .envelope-wrap{
+    position:relative;
+    width:100%;
+    max-width:300px;
+    margin:34px auto 0;
+  }
+  .letter-card{
+    position:relative;
+    z-index:3;
+    background:#fff;
+    border:1px solid var(--pearl-edge);
+    box-shadow:0 10px 26px rgba(46,42,24,0.14);
+    padding:16px 18px;
+    font-size:0.8rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(18px);
+    transition:transform 0.9s cubic-bezier(.2,.8,.2,1), opacity 0.7s ease, visibility 0s linear 0.7s;
+  }
+  .envelope-photo-box{
+    position:relative;
+    z-index:2;
+    margin-top:-14px;
+    transition:transform 0.9s cubic-bezier(.4,0,.2,1), opacity 0.7s ease;
+    transform-origin:center top;
+  }
+  .envelope-photo{
+    width:100%;
+    display:block;
+    /* ЗАМЕНИ src на фото/иллюстрацию конверта */
+  }
+  .envelope-photo-box{ cursor:pointer; }
+  .envelope-hint{
+    position:absolute;
+    left:50%; bottom:-18px;
+    z-index:5;
+    transform:translateX(-50%);
+    padding:7px 13px;
+    border:1px solid var(--ink);
+    border-radius:20px;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Poiret One', sans-serif;
+    font-size:0.72rem;
+    font-weight:600;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:transform 0.2s ease, opacity 0.4s ease;
+  }
+  .envelope-hint:hover{ transform:translateX(-50%) translateY(-2px); }
+  .seal-btn{
+    position:absolute;
+    left:50%; top:38%;
+    transform:translate(-50%,-50%);
+    z-index:4;
+    width:56px; height:56px;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    cursor:pointer;
+    padding:0;
+  }
+  .seal-img{
+    width:100%; height:100%;
+    display:block;
+    border-radius:50%;
+    /* ЗАМЕНИ src на фото восковой печати, либо оставь как есть — ниже есть css-заглушка */
+  }
+  .seal-fallback{
+    width:56px; height:56px;
+    border-radius:50%;
+    background:#EFE7D8;
+    border:1px solid var(--pearl-edge);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Poiret One', sans-serif;
+    font-size:1.1rem;
+    color:var(--ink);
+  }
+  .seal-btn.opened{
+    transform:translate(-50%,-50%) rotate(35deg) scale(0.7);
+    opacity:0;
+    pointer-events:none;
+    transition:transform 0.6s ease, opacity 0.5s ease;
+  }
+  .envelope-wrap.opened .envelope-photo-box{
+    transform:translateY(30px) scale(0.94) rotate(-2deg);
+    opacity:0;
+  }
+  .envelope-wrap.opened .letter-card{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(-8px) scale(1.03);
+    transition-delay:0.2s, 0.2s, 0s;
+  }
+  .envelope-wrap.opened .envelope-hint{ opacity:0; pointer-events:none; }
+
+  .ps-text{
+    margin-top:16px;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+
+  .next-link{
+    margin-top:30px;
+    display:inline-block;
+    font-family:'Poiret One', sans-serif;
+    font-weight:600;
+    font-size:0.88rem;
+    color:var(--ink);
+    text-decoration:none;
+    background:transparent;
+    border:1px solid var(--ink);
+    border-radius:30px;
+    padding:13px 32px;
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity 0.8s ease, transform 0.8s ease;
+    pointer-events:none;
+    /* ЗАМЕНИ href на ссылку следующего экрана */
+  }
+  .next-link.show{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+
+  .page-loader{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--cream);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 0.3s ease, visibility 0s linear 0.3s;
+  }
+  .page-loader.show{
+    opacity:1;
+    visibility:visible;
+    transition:opacity 0.3s ease;
+  }
+  .page-loader img{
+    width:112px;
+    height:112px;
+    object-fit:contain;
+    animation:loader-spin 1s linear infinite;
+  }
+  @keyframes loader-spin{ to{ transform:rotate(360deg); } }
+
+  @media (max-width:360px){
+    .envelope-wrap{ max-width:250px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="screen" id="screen">
+
+  <div class="logo-wrap reveal r1">
+    <svg class="pearls-svg" viewBox="0 0 340 120">
+      <path id="pearlPathL" d="M170 6 C120 20, 70 10, 40 40 C10 70, 30 95, 20 118" fill="none" stroke="none"/>
+      <path id="pearlPathR" d="M170 6 C220 20, 270 10, 300 40 C330 70, 310 95, 320 118" fill="none" stroke="none"/>
+      <g id="pearlsL"></g>
+      <g id="pearlsR"></g>
+    </svg>
+   
+    <img class="logo" src="logo.png" alt="Логотип">
+    <svg class="logo-flourish" viewBox="0 0 22 14">
+      <path d="M2 2 L11 12 L20 2" stroke="var(--ink)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    </svg>
+    
+  </div>
+
+  <h1 class="greeting reveal r2">Привет, Ира<br>С годовщиной дружбы!</h1>
+
+  <h2 class="letter-heading reveal r3">Дорогой друг</h2>
+  <p class="letter-subheading reveal r4">то есть — ты</p>
+
+  <div class="envelope-wrap reveal r5" id="envelopeWrap">
+    <div class="letter-card" id="letterCard">
+      Перейди на следующую страницу и загляни в наши самые яркие моменты за последние месяцы. А ещё внутри приглашение на «деловую встречу» (ты поняла, о чём я). С годовщиной дружбы!
+    </div>
+    <div class="envelope-photo-box" id="envelopePhotoBox">
+      <img class="envelope-photo" src="conv2.png" alt="Конверт">
+    </div>
+    <button class="seal-btn" id="sealBtn" aria-label="Открыть конверт">
+      <img class="seal-img" src="ЗАМЕНИ_НА_ПЕЧАТЬ.png" alt="Печать" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <span class="seal-fallback" style="display:none;">✕</span>
+    </button>
+    <button class="envelope-hint" id="envelopeHint" type="button">Открыть конверт</button>
+  </div>
+
+  <p class="ps-text reveal r7">P.S. и не забудь включить звук на максимум</p>
+
+  <a class="next-link" id="nextLink" href="screen2.html">Продолжить</a>
+
+  
+  <audio id="bgMusic" loop preload="none">
+    <source src="mus1.mp3" type="audio/mpeg">
+  </audio>
+
+</div>
+
+<div class="page-loader" id="pageLoader" aria-hidden="true">
+  <img src="Loading 1.png" alt="Загрузка">
+</div>
+
+<script>
+  const svgNS = 'http://www.w3.org/2000/svg';
+
+  function threadPearls(pathId, groupId, count, r){
+    const path = document.getElementById(pathId);
+    const group = document.getElementById(groupId);
+    if(!path || !group) return;
+    const len = path.getTotalLength();
+    for(let i=0;i<count;i++){
+      const pt = path.getPointAtLength(len * i/(count-1));
+      const c = document.createElementNS(svgNS,'circle');
+      c.setAttribute('cx', pt.x.toFixed(2));
+      c.setAttribute('cy', pt.y.toFixed(2));
+      c.setAttribute('r', r);
+      c.setAttribute('fill', '#F4EFE6');
+      c.setAttribute('stroke', 'rgba(46,42,24,0.35)');
+      c.setAttribute('stroke-width', '0.6');
+      group.appendChild(c);
+    }
+  }
+  threadPearls('pearlPathL', 'pearlsL', 9, 4.2);
+  threadPearls('pearlPathR', 'pearlsR', 9, 4.2);
+
+  // плавное появление всего экрана при загрузке
+  const screen = document.getElementById('screen');
+  window.addEventListener('load', ()=>{
+    requestAnimationFrame(()=> screen.classList.add('loaded'));
+  });
+
+  // открытие конверта + музыка
+  const sealBtn = document.getElementById('sealBtn');
+  const envelopeHint = document.getElementById('envelopeHint');
+  const envelopePhotoBox = document.getElementById('envelopePhotoBox');
+  const envelopeWrap = document.getElementById('envelopeWrap');
+  const nextLink = document.getElementById('nextLink');
+  const pageLoader = document.getElementById('pageLoader');
+  const bgMusic = document.getElementById('bgMusic');
+  let opened = false;
+
+  function openEnvelope(){
+    if(opened) return;
+    opened = true;
+
+    envelopeWrap.classList.add('opened');
+    sealBtn.classList.add('opened');
+
+    bgMusic.volume = 0.8;
+    bgMusic.play().catch(()=>{ /* если файл музыки ещё не добавлен — просто игнорируем */ });
+
+    setTimeout(()=>{
+      nextLink.classList.add('show');
+    }, 900);
+  }
+
+  sealBtn.addEventListener('click', openEnvelope);
+  envelopeHint.addEventListener('click', openEnvelope);
+  envelopePhotoBox.addEventListener('click', openEnvelope);
+
+  nextLink.addEventListener('click', (event)=>{
+    event.preventDefault();
+    if(pageLoader.classList.contains('show')) return;
+    pageLoader.classList.add('show');
+    setTimeout(()=>{ window.location.href = nextLink.href; }, 3000);
+  });
+</script>
+
+</body>
+</html>

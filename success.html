@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заявка отправлена</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+  <style>
+    :root { --cream:#f4efe6; --ink:#2e2a24; --soft:#6b6255; }
+    * { box-sizing:border-box; }
+    body { min-height:100vh; margin:0; display:grid; place-items:center; background:var(--cream); color:var(--ink); font-family:'Poiret One',sans-serif; font-weight:600; }
+    main { width:min(100%,420px); padding:32px 28px; text-align:center; }
+    img { width:170px; max-width:60%; margin-bottom:28px; }
+    h1 { margin:0; font-size:2.15rem; font-weight:400; line-height:1.1; }
+    p { margin:14px 0 0; color:var(--soft); font-size:1rem; line-height:1.4; }
+    .details { display:none; margin:25px 0; padding:17px; border:1px solid rgba(46,42,24,.2); border-radius:10px; background:#fffdf9; }
+    .details.show { display:block; }
+    a { display:inline-block; margin-top:30px; padding:12px 25px; border:1px solid var(--ink); border-radius:99px; color:var(--ink); text-decoration:none; }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="crosh.png" alt="Крош">
+    <h1>Заявка отправлена!</h1>
+    <p>Ура! Скоро наше новое приключение станет реальностью.</p>
+    <div class="details" id="details"></div>
+    <a href="screen2.html">Вернуться к карте</a>
+  </main>
+  <script>
+    const date = sessionStorage.getItem('inviteDate');
+    const activities = sessionStorage.getItem('inviteActivities');
+    if (date) {
+      const details = document.getElementById('details');
+      details.textContent = `Дата: ${date}${activities ? ` · ${activities}` : ''}`;
+      details.classList.add('show');
+    }
+  </script>
+</body>
+</html>
