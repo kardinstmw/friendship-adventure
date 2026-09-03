@@ -1,1018 +1,1444 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Карта приключений</title>
+    <title>Карта приключений</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <style>
-    :root {
-      --cream: #f4efe6;
-      --ink: #2e2a24;
-      --soft: #6b6255;
-      --line: #d4d0c7;
-      --pink: #f4a8b7;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
 
-    * {
-      box-sizing: border-box;
-    }
+    <style>
+        :root {
+            --cream: #f4efe6;
+            --ink: #2e2a24;
+            --soft: #6b6255;
+            --line: #d4d0c7;
+            --pink: #f4a8b7;
+        }
 
-    html {
-      scroll-behavior: smooth;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--cream);
-      font-family: 'Poiret One', sans-serif;
-      font-weight: 600;
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    button,
-    input {
-      font: inherit;
-    }
+        body {
+            margin: 0;
+            background: var(--cream);
+            color: var(--ink);
+            font-family: "Poiret One", cursive;
+            overflow-x: hidden;
+        }
 
-    .page {
-      width: 100%;
-      max-width: 420px;
-      min-height: 100vh;
-      margin: auto;
-      overflow: hidden;
-      position: relative;
-    }
+        img {
+            max-width: 100%;
+            display: block;
+        }
 
-    .banner {
-      width: 100%;
-      display: block;
-    }
+        button,
+        input {
+            font-family: inherit;
+        }
 
-    .intro {
-      padding: 58px 24px 18px;
-      position: relative;
-      min-height: 230px;
-    }
+        /* =========================
+           BANNER
+        ========================= */
 
-    h1,
-    h2,
-    p {
-      margin: 0;
-    }
+        .banner {
+            width: 100%;
+            height: auto;
+        }
 
-    h1 {
-      max-width: 225px;
-      font-size: 2rem;
-      line-height: 1.08;
-      font-weight: 400;
-    }
+        .banner img {
+            width: 100%;
+            height: auto;
+        }
 
-    .intro-note {
-      width: 125px;
-      margin: 12px 0 0;
-      color: var(--soft);
-      font-size: .93rem;
-      line-height: 1.2;
-    }
+        /* =========================
+           INTRO
+        ========================= */
 
-    .guide {
-      position: absolute;
-      right: 18px;
-      bottom: -4px;
-      width: 128px;
-      text-align: center;
-      line-height: .8;
-      transform: rotate(-5deg);
-    }
+        .intro {
+            text-align: center;
+            padding: 70px 20px 45px;
+        }
 
-    .guide img {
-      display: block;
-      width: 200px;
-      height: auto;
-      margin: 0 auto;
-    }
+        .intro h1 {
+            margin: 0 0 15px;
+            font-size: clamp(34px, 6vw, 64px);
+            font-weight: 400;
+        }
 
-    .guide span {
-      display: block;
-      margin-top: 14px;
-      padding: 8px;
-      border: 2px solid var(--ink);
-      border-radius: 8px;
-      background: #fffdf7;
-      font-size: .67rem;
-      line-height: 1.1;
-      transform: rotate(7deg);
-    }
+        .intro p {
+            margin: 0 auto;
+            max-width: 700px;
+            font-size: clamp(18px, 2.5vw, 24px);
+            line-height: 1.5;
+            color: var(--soft);
+        }
 
-    .map {
-      position: relative;
-      min-height: 890px;
-      padding: 75px 0 30px;
-    }
+        /* =========================
+           MAP
+        ========================= */
 
-    .route {
-      position: absolute;
-      left: 50%;
-      top: 20px;
-      height: 785px;
-      transform: translateX(-50%);
-      z-index: 0;
-    }
+        .map-wrapper {
+            position: relative;
+            width: min(1100px, 94%);
+            margin: 0 auto;
+            padding: 20px 0 80px;
+        }
 
-    .memory {
-      position: absolute;
-      z-index: 1;
-      width: 84px;
-      height: 84px;
-      padding: 4px;
-      border: 0;
-      border-radius: 50%;
-      background: var(--cream);
-      cursor: pointer;
-      box-shadow: 0 0 0 1px rgba(46, 42, 24, .13);
-      transition:
-        transform .2s ease,
-        box-shadow .2s ease;
-    }
+        .map {
+            position: relative;
+            width: 100%;
+            min-height: 700px;
+        }
 
-    .memory:hover,
-    .memory:focus-visible {
-      transform: scale(1.08);
-      box-shadow: 0 5px 16px rgba(46, 42, 24, .22);
-      outline: none;
-    }
+        .route {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 75%;
+            transform: translate(-50%, -50%);
+            opacity: 0.7;
+            pointer-events: none;
+        }
 
-    .memory img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
+        /* =========================
+           GUIDE CHARACTER
+        ========================= */
 
-    .memory.one {
-      top: 58px;
-      left: calc(50% - 28px);
-    }
+        .guide {
+            position: absolute;
+            width: 150px;
+            left: 50%;
+            top: 30px;
+            transform: translateX(-50%);
+            z-index: 3;
+        }
 
-    .memory.two {
-      top: 285px;
-      left: calc(50% - 76px);
-    }
+        /* =========================
+           SIDE CHARACTERS
+        ========================= */
 
-    .memory.three {
-      top: 525px;
-      left: calc(50% - 42px);
-    }
+        .character {
+            position: absolute;
+            z-index: 2;
+            pointer-events: none;
+        }
 
-    .memory.four {
-      top: 665px;
-      left: calc(50% - 105px);
-    }
+        .character-1 {
+            width: 110px;
+            left: 2%;
+            top: 180px;
+        }
 
-    .side-character {
-      position: absolute;
-      z-index: 2;
-      width: 96px;
-      height: auto;
-      filter: drop-shadow(0 4px 0 rgba(46, 42, 24, .14));
-      user-select: none;
-    }
+        .character-2 {
+            width: 120px;
+            right: 1%;
+            top: 120px;
+        }
 
-    .side-character.left-top {
-      top: 110px;
-      left: -25px;
-      transform: rotate(-18deg);
-    }
+        .character-3 {
+            width: 120px;
+            left: 3%;
+            bottom: 120px;
+        }
 
-    .side-character.right-top {
-      top: 160px;
-      right: -25px;
-      transform: rotate(16deg);
-    }
+        .character-4 {
+            width: 120px;
+            right: 3%;
+            bottom: 60px;
+        }
 
-    .side-character.left-bottom {
-      top: 480px;
-      left: -22px;
-      transform: rotate(12deg);
-    }
+        /* =========================
+           MEMORY CARDS
+        ========================= */
 
-    .side-character.right-bottom {
-      top: 500px;
-      right: -23px;
-      transform: rotate(-10deg);
-    }
+        .memory {
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            border: 5px solid var(--cream);
+            box-shadow: 0 10px 30px rgba(46, 42, 36, 0.18);
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+            z-index: 5;
+            background: #ddd;
+        }
 
-    .tap-hint {
-      position: absolute;
-      bottom: 4px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--soft);
-      font-size: .75rem;
-      white-space: nowrap;
-    }
+        .memory:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 40px rgba(46, 42, 36, 0.28);
+        }
 
-    .invite {
-      padding: 4px 16px 60px;
-      text-align: center;
-    }
+        .memory img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-    h2 {
-      font-size: 1.75rem;
-      font-weight: 400;
-    }
+        .memory-1 {
+            top: 170px;
+            left: 16%;
+        }
 
-    .subtitle {
-      margin: 7px 0 22px;
-      color: var(--soft);
-      font-size: .92rem;
-      font-style: italic;
-    }
+        .memory-2 {
+            top: 190px;
+            right: 15%;
+        }
 
-    form {
-      text-align: left;
-    }
+        .memory-3 {
+            bottom: 140px;
+            left: 18%;
+        }
 
-    .date-label {
-      display: block;
-      margin: 0 0 8px;
-      text-align: center;
-      font-size: 1rem;
-    }
+        .memory-4 {
+            bottom: 100px;
+            right: 17%;
+        }
 
-    input[type="date"] {
-      width: 100%;
-      min-height: 58px;
-      padding: 12px 14px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: #fffdf9;
-      color: var(--ink);
-      font-size: 1rem;
-    }
+        /* =========================
+           MEMORY NUMBER
+        ========================= */
 
-    .choice-title {
-      margin: 29px 0 13px;
-      text-align: center;
-      font-size: 1rem;
-    }
+        .memory-number {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--pink);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            z-index: 2;
+        }
 
-    .choices {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px 12px;
-    }
+        /* =========================
+           MODAL
+        ========================= */
 
-    .choice {
-      position: relative;
-    }
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(46, 42, 36, 0.72);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
 
-    .choice input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
+        .modal.active {
+            display: flex;
+        }
 
-    .choice span {
-      display: block;
-      min-width: 76px;
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      text-align: center;
-      font-size: .85rem;
-      cursor: pointer;
-      transition:
-        background .2s,
-        border-color .2s,
-        transform .2s;
-    }
+        .modal-content {
+            position: relative;
+            width: min(850px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--cream);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.3);
+        }
 
-    .choice input:checked + span {
-      border-color: var(--ink);
-      background: var(--pink);
-      transform: translateY(-2px);
-    }
+        .modal-close {
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(244, 168, 183, 0.95);
+            color: var(--ink);
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 10;
+        }
 
-    .submit {
-      display: block;
-      width: 170px;
-      margin: 46px auto 0;
-      padding: 13px 20px;
-      border: 1px solid var(--ink);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--ink);
-      cursor: pointer;
-      font-size: 1rem;
-      transition:
-        background .2s,
-        color .2s,
-        transform .2s;
-    }
+        .modal-media {
+            width: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
 
-    .submit:hover {
-      background: var(--ink);
-      color: var(--cream);
-      transform: translateY(-2px);
-    }
+        video.modal-media {
+            background: #000;
+        }
 
-    .submit:disabled {
-      opacity: .6;
-      cursor: wait;
-      transform: none;
-    }
+        .modal-title {
+            margin: 0 0 12px;
+            font-size: 32px;
+            font-weight: 400;
+        }
 
-    .mail-note {
-      margin-top: 12px;
-      color: var(--soft);
-      text-align: center;
-      font-size: .66rem;
-      line-height: 1.3;
-    }
+        .modal-text {
+            margin: 0;
+            font-size: 20px;
+            line-height: 1.6;
+            color: var(--soft);
+            white-space: pre-line;
+        }
 
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      padding: 20px;
-      align-items: center;
-      justify-content: center;
-      background: rgba(46, 42, 24, .68);
-    }
+        /* =========================
+           FORM SECTION
+        ========================= */
 
-    .modal.open {
-      display: flex;
-    }
+        .invite-section {
+            width: min(850px, 92%);
+            margin: 0 auto;
+            padding: 70px 0 100px;
+            text-align: center;
+        }
 
-    .modal-card {
-      width: min(100%, 380px);
-      max-height: 90vh;
-      overflow: auto;
-      position: relative;
-      padding: 14px 14px 22px;
-      border-radius: 12px;
-      background: var(--cream);
-      text-align: center;
-    }
+        .invite-section h2 {
+            margin: 0 0 10px;
+            font-size: clamp(34px, 5vw, 54px);
+            font-weight: 400;
+        }
 
-    .modal-image {
-      display: block;
-      width: 100%;
-      max-height: 58vh;
-      border-radius: 7px;
-      object-fit: contain;
-      background: #dedede;
-    }
+        .invite-section .subtitle {
+            margin: 0 0 40px;
+            font-size: 22px;
+            color: var(--soft);
+        }
 
-    .modal-text {
-      margin: 15px 12px 0;
-      font-size: 1.05rem;
-      line-height: 1.35;
-      white-space: pre-line;
-    }
+        #inviteForm {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.35);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 30px;
+        }
 
-    .close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 34px;
-      height: 34px;
-      border: 1px solid var(--ink);
-      border-radius: 50%;
-      background: var(--cream);
-      color: var(--ink);
-      cursor: pointer;
-      font-size: 1.3rem;
-      z-index: 2;
-    }
-  </style>
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 21px;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 15px 18px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.65);
+            color: var(--ink);
+            font-size: 18px;
+            outline: none;
+        }
+
+        input[type="date"]:focus {
+            border-color: var(--pink);
+        }
+
+        .activities {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .activity {
+            position: relative;
+        }
+
+        .activity input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .activity label {
+            display: block;
+            padding: 15px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.45);
+            font-size: 18px;
+            text-align: center;
+            transition: all 0.25s ease;
+        }
+
+        .activity label:hover {
+            border-color: var(--pink);
+        }
+
+        .activity input:checked + label {
+            background: var(--pink);
+            border-color: var(--pink);
+        }
+
+        .submit-button {
+            width: 100%;
+            border: none;
+            border-radius: 14px;
+            padding: 17px 25px;
+            background: var(--ink);
+            color: var(--cream);
+            font-size: 21px;
+            cursor: pointer;
+            transition:
+                transform 0.2s ease,
+                opacity 0.2s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+            transform: none;
+        }
+
+        .form-message {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .form-message.show {
+            display: block;
+        }
+
+        .form-message.error {
+            background: #f5d5d5;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            text-align: center;
+            padding: 30px 20px 50px;
+            color: var(--soft);
+            font-size: 16px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .intro {
+                padding-top: 45px;
+            }
+
+            .map {
+                min-height: 650px;
+            }
+
+            .guide {
+                width: 110px;
+                top: 10px;
+            }
+
+            .route {
+                width: 95%;
+            }
+
+            .memory {
+                width: 145px;
+                height: 145px;
+            }
+
+            .memory-1 {
+                left: 2%;
+                top: 150px;
+            }
+
+            .memory-2 {
+                right: 2%;
+                top: 170px;
+            }
+
+            .memory-3 {
+                left: 2%;
+                bottom: 120px;
+            }
+
+            .memory-4 {
+                right: 2%;
+                bottom: 80px;
+            }
+
+            .character-1 {
+                width: 75px;
+                left: 0;
+                top: 310px;
+            }
+
+            .character-2 {
+                width: 75px;
+                right: 0;
+                top: 320px;
+            }
+
+            .character-3 {
+                width: 80px;
+                left: 0;
+                bottom: 15px;
+            }
+
+            .character-4 {
+                width: 80px;
+                right: 0;
+                bottom: 10px;
+            }
+
+            .modal-content {
+                padding: 18px;
+                border-radius: 18px;
+            }
+
+            .modal-title {
+                font-size: 27px;
+            }
+
+            .modal-text {
+                font-size: 17px;
+            }
+
+            .activities {
+                grid-template-columns: 1fr;
+            }
+
+            #inviteForm {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <main class="page">
+    <!-- =========================
+         BANNER
+    ========================== -->
 
-    <img
-      class="banner"
-      src="banner.png"
-      alt="Давай вспомним моменты, которые запомнились"
-    >
+    <div class="banner">
+        <img src="banner.png" alt="Карта приключений">
+    </div>
+
+
+    <!-- =========================
+         INTRO
+    ========================== -->
 
     <section class="intro">
 
-      <h1>
-        Карта<br>
-        Приключений
-      </h1>
-
-      <p class="intro-note">
-        Нажимай на фото — и вспоминай яркие моменты!
-      </p>
-
-      <div class="guide" aria-hidden="true">
-        <img src="crosh1.png" alt="">
-        <span>
-          Привет, я Крош путеводитель.
-          Нажимай на фото, чтобы разблокировать приключение
-        </span>
-      </div>
-
-    </section>
-
-
-    <section class="map" aria-label="Карта воспоминаний">
-
-      <img
-        class="side-character left-top"
-        src="photo1 1.png"
-        alt=""
-      >
-
-      <img
-        class="side-character right-top"
-        src="photo2 1.png"
-        alt=""
-      >
-
-      <img
-        class="side-character left-bottom"
-        src="photo4 1.png"
-        alt=""
-      >
-
-      <img
-        class="side-character right-bottom"
-        src="Loading 1.png"
-        alt=""
-      >
-
-      <img
-        class="route"
-        src="Line.png"
-        alt=""
-      >
-
-
-      <!-- ПЕРВОЕ ВОСПОМИНАНИЕ -->
-
-      <button
-        class="memory one"
-        type="button"
-        data-image="1story 1.png"
-        data-text="05.03.26
-
-Никогда бы не подумал, что случайный приезд в Смули Хез так обернётся и принесёт в мою жизнь такого человека.
-
-Казалось бы, такой короткий период, со своими трудностями и обстоятельствами, которые в моменте сильно всё усложняли. Но за эти 6 месяцев, несмотря ни на что, было столько приключений и авантюр.
-
-Столько всего произошло, что иногда самому сложно поверить, что всё это вместилось всего в полгода.
-
-Жаль лишь, что фотографирую я мало."
-      >
-
-        <img
-          src="258.png"
-          alt="Первое воспоминание"
-        >
-
-      </button>
-
-
-      <!-- ВТОРОЕ ВОСПОМИНАНИЕ -->
-
-      <button
-        class="memory two"
-        type="button"
-        data-image="story2.mp4"
-        data-text="Секретная доставка
-
-Одна из главных авантюр за последние полгода — это, конечно же, секретная доставка киндеров в Ригу.
-
-Привезти их оказалось гораздо легче, чем найти этот дом с прекрасным видом на морг.
-
-Но адрес я всё-таки нашёл.
-
-И, кажется, именно с этого момента я понял, что ради некоторых вещей готов немного поиграть в детектива.
-
-А теперь небольшая улика, по которой этот дом вообще удалось найти…"
-      >
-
-        <img
-          src="259.png"
-          alt="Второе воспоминание"
-        >
-
-      </button>
-
-
-      <!-- ТРЕТЬЕ ВОСПОМИНАНИЕ -->
-
-      <button
-        class="memory three"
-        type="button"
-        data-image="story3 1.png"
-        data-text="За эти полгода
-
-Ты, как любительница одного ушастого голубого зубастика, конечно же, имела его плюшевую версию. И чтобы ему было чуть веселее, мы дополнили твою коллекцию.
-
-А заодно за это время появились уже свои традиции.
-
-Ночной Мак после ваших с Рианной тусовок или походов в кино — уже как отдельный ритуал.
-
-Успели и у тебя дома посидеть: как выпить, так и посмотреть, как Аня с Рианной сливают деньги на футбол.
-
-Открыли для себя и новые места. Чего только стоит этот храм.
-
-Но самое незабываемое — это, конечно же, вышка, на которую мы катались аж два раза ради крутых фотографий рассвета.
-
-Кажется, если однажды найти место, откуда красиво встречать рассвет, то остановиться уже невозможно."
-      >
-
-        <img
-          src="260.png"
-          alt="Третье воспоминание"
-        >
-
-      </button>
-
-
-      <!-- ЧЕТВЁРТОЕ ВОСПОМИНАНИЕ -->
-
-      <button
-        class="memory four"
-        type="button"
-        data-image="story4 1.png"
-        data-text="Крош и Ёжик
-
-Крош и Ёжик — те ещё путешественники и авантюристы.
-
-Поэтому, когда поступило предложение резко поехать вместе в Пярну, долго думать никто не стал.
-
-Через полчаса мы уже были в пути.
-
-А ведь на Пярну всё могло и не закончиться.
-
-В планах была ещё одна поездка — в Ригу.
-
-Но врач в 15:00 решил немного изменить наши планы и остановил нас от этой затеи.
-
-Но ничего. Ещё исправим."
-      >
-
-        <img
-          src="261.png"
-          alt="Четвёртое воспоминание"
-        >
-
-      </button>
-
-
-      <p class="tap-hint">
-        Нажми на кружок с фото
-      </p>
-
-    </section>
-
-
-    <!-- ФОРМА -->
-
-    <section class="invite">
-
-      <h2>
-        Полгода дружбы позади
-      </h2>
-
-      <p class="subtitle">
-        Пора это отметить!
-      </p>
-
-
-      <form
-        id="inviteForm"
-        action="https://formsubmit.co/kardin.stmw@gmail.com"
-        method="POST"
-      >
-
-        <!-- Настройки FormSubmit -->
-
-        <input
-          type="hidden"
-          name="_subject"
-          value="Новая заявка на встречу"
-        >
-
-        <input
-          type="hidden"
-          name="_template"
-          value="table"
-        >
-
-        <input
-          type="hidden"
-          name="_captcha"
-          value="false"
-        >
-
-        <!--
-          После отправки FormSubmit перенаправит
-          на страницу success.html
-        -->
-
-        <input
-          type="hidden"
-          name="_next"
-          value="https://kardinstmw.github.io/friendship-adventure/success.html"
-        >
-
-
-        <label
-          class="date-label"
-          for="date"
-        >
-          Выбери удобную дату
-        </label>
-
-
-        <input
-          id="date"
-          name="date"
-          type="date"
-          required
-        >
-
-
-        <p class="choice-title">
-          Выбери предпочтения
+        <h1>Карта Приключений</h1>
+
+        <p>
+            Полгода дружбы, случайных поездок,
+            секретных доставок и историй,
+            которые хочется запомнить.
         </p>
 
+    </section>
 
-        <div class="choices">
 
-          <label class="choice">
-            <input
-              type="checkbox"
-              name="activity"
-              value="Кино"
+    <!-- =========================
+         MAP
+    ========================== -->
+
+    <section class="map-wrapper">
+
+        <div class="map">
+
+            <!-- Route -->
+
+            <img
+                src="Line.png"
+                alt=""
+                class="route"
             >
-            <span>Кино</span>
-          </label>
 
 
-          <label class="choice">
-            <input
-              type="checkbox"
-              name="activity"
-              value="Ресторан"
+            <!-- Guide -->
+
+            <img
+                src="crosh1.png"
+                alt=""
+                class="guide"
             >
-            <span>Ресторан</span>
-          </label>
 
 
-          <label class="choice">
-            <input
-              type="checkbox"
-              name="activity"
-              value="Прогулка"
+            <!-- Side characters -->
+
+            <img
+                src="photo1 1.png"
+                alt=""
+                class="character character-1"
             >
-            <span>Прогулка</span>
-          </label>
 
-
-          <label class="choice">
-            <input
-              type="checkbox"
-              name="activity"
-              value="Гулять"
+            <img
+                src="photo2 1.png"
+                alt=""
+                class="character character-2"
             >
-            <span>Гулять</span>
-          </label>
 
-
-          <label class="choice">
-            <input
-              type="checkbox"
-              name="activity"
-              value="Театр"
+            <img
+                src="photo4 1.png"
+                alt=""
+                class="character character-3"
             >
-            <span>Театр</span>
-          </label>
 
-
-          <label class="choice">
-            <input
-              type="checkbox"
-              name="activity"
-              value="Клуб"
+            <img
+                src="Loading 1.png"
+                alt=""
+                class="character character-4"
             >
-            <span>Клуб</span>
-          </label>
 
 
-          <label class="choice">
-            <input
-              type="checkbox"
-              name="activity"
-              value="Картинг"
+            <!-- =========================
+                 MEMORY 1
+            ========================== -->
+
+            <div
+                class="memory memory-1"
+                data-title="Первая глава"
+                data-image="1story 1.png"
+                data-text="05.03.26
+
+Случайный приезд в Смули Хез стал началом нашей большой истории.
+
+Казалось бы, обычный день, обычная поездка, но именно с этого момента начались наши приключения.
+
+Уже 6 месяцев мы постоянно куда-то ездим, что-то придумываем, смеёмся и создаём новые воспоминания.
+
+И это только начало ❤️"
             >
-            <span>Картинг</span>
-          </label>
+
+                <img
+                    src="258.png"
+                    alt="Воспоминание 1"
+                >
+
+                <span class="memory-number">1</span>
+
+            </div>
 
 
-          <label class="choice">
-            <input
-              type="checkbox"
-              name="activity"
-              value="Мини-гольф"
+            <!-- =========================
+                 MEMORY 2
+            ========================== -->
+
+            <div
+                class="memory memory-2"
+                data-title="Секретная доставка"
+                data-image="story2.mp4"
+                data-text="Секретная доставка...
+
+Однажды появилась очень важная миссия — доставить Kinder в Ригу.
+
+Но всё оказалось гораздо интереснее обычной поездки.
+
+Дом с видом на морг, загадочные обстоятельства и ощущение, будто мы оказались внутри настоящего детектива.
+
+Кажется, после таких приключений обычные поездки уже не воспринимаются так же."
             >
-            <span>Мини-гольф</span>
-          </label>
+
+                <img
+                    src="259.png"
+                    alt="Воспоминание 2"
+                >
+
+                <span class="memory-number">2</span>
+
+            </div>
+
+
+            <!-- =========================
+                 MEMORY 3
+            ========================== -->
+
+            <div
+                class="memory memory-3"
+                data-title="Ушастый голубой зубастик"
+                data-image="story3 1.png"
+                data-text="История ушастого голубого зубастика.
+
+Сначала он просто появился в разговорах.
+
+А потом у него появилась плюшевая версия, свои традиции и целая история.
+
+Ночной McDonald's, футбол, храм, башня, рассвет и куча совершенно случайных моментов.
+
+Наверное, именно из таких маленьких и странных вещей и состоит настоящая дружба."
+            >
+
+                <img
+                    src="260.png"
+                    alt="Воспоминание 3"
+                >
+
+                <span class="memory-number">3</span>
+
+            </div>
+
+
+            <!-- =========================
+                 MEMORY 4
+            ========================== -->
+
+            <div
+                class="memory memory-4"
+                data-title="Крош и Ёжик"
+                data-image="story4 1.png"
+                data-text="Крош и Ёжик.
+
+Внезапная поездка в Пярну.
+
+Планы на Ригу.
+
+Казалось, что впереди ещё куча приключений.
+
+Но доктор в 15:00 решил немного изменить наши планы.
+
+И вот так очередная спонтанная история получила совершенно неожиданный поворот."
+            >
+
+                <img
+                    src="261.png"
+                    alt="Воспоминание 4"
+                >
+
+                <span class="memory-number">4</span>
+
+            </div>
 
         </div>
 
-
-        <button
-          class="submit"
-          type="submit"
-          id="submitButton"
-        >
-          Отправить
-        </button>
-
-
-        <p class="mail-note">
-          После отправки заявки ты попадёшь на страницу подтверждения.
-        </p>
-
-      </form>
-
     </section>
 
-  </main>
 
+    <!-- =========================
+         MODAL
+    ========================== -->
 
-  <!-- МОДАЛЬНОЕ ОКНО -->
+    <div
+        class="modal"
+        id="memoryModal"
+    >
 
-  <div
-    class="modal"
-    id="memoryModal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modalText"
-  >
+        <div class="modal-content">
 
-    <div class="modal-card">
+            <button
+                class="modal-close"
+                id="modalClose"
+                aria-label="Закрыть"
+            >
+                ×
+            </button>
 
-      <button
-        class="close"
-        type="button"
-        aria-label="Закрыть"
-      >
-        ×
-      </button>
+            <div id="modalMediaContainer"></div>
 
-      <img
-        class="modal-image"
-        id="modalImage"
-        src=""
-        alt=""
-      >
+            <h2
+                class="modal-title"
+                id="modalTitle"
+            ></h2>
 
-      <p
-        class="modal-text"
-        id="modalText"
-      ></p>
+            <p
+                class="modal-text"
+                id="modalText"
+            ></p>
+
+        </div>
 
     </div>
 
-  </div>
 
+    <!-- =========================
+         MUSIC
+    ========================== -->
 
-  <!-- МУЗЫКА -->
-
-  <audio
-    id="bgMusic"
-    loop
-    preload="auto"
-  >
-    <source
-      src="smeshariki_08.mp3"
-      type="audio/mpeg"
+    <audio
+        id="backgroundMusic"
+        loop
     >
-  </audio>
+
+        <source
+            src="smeshariki_08.mp3"
+            type="audio/mpeg"
+        >
+
+    </audio>
 
 
-  <script>
+    <!-- =========================
+         INVITATION FORM
+    ========================== -->
 
-    /* =========================
-       МУЗЫКА
-    ========================= */
+    <section class="invite-section">
 
-    const music = document.getElementById('bgMusic');
+        <h2>
+            Полгода дружбы позади
+        </h2>
 
-    const startMusic = () => {
-      music.play().catch(() => {});
-    };
-
-    window.addEventListener('load', startMusic);
-
-    document.addEventListener(
-      'pointerdown',
-      startMusic,
-      { once: true }
-    );
+        <p class="subtitle">
+            Пора это отметить!
+        </p>
 
 
-    /* =========================
-       МОДАЛЬНЫЕ ВОСПОМИНАНИЯ
-    ========================= */
+        <form id="inviteForm">
 
-    const modal =
-      document.getElementById('memoryModal');
+            <!--
+                AJAX FormSubmit.
+                НЕ добавляем action="https://formsubmit.co/..."
+                потому что форма отправляется через JavaScript.
+            -->
 
-    const modalImage =
-      document.getElementById('modalImage');
+            <input
+                type="hidden"
+                name="_subject"
+                value="Приглашение — полгода дружбы"
+            >
 
-    const modalText =
-      document.getElementById('modalText');
+            <input
+                type="hidden"
+                name="_template"
+                value="table"
+            >
 
+            <div class="form-group">
 
-    document
-      .querySelectorAll('.memory')
-      .forEach((memory) => {
+                <label
+                    class="form-label"
+                    for="date"
+                >
+                    Выбери удобную дату
+                </label>
 
-        memory.addEventListener('click', () => {
+                <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    required
+                >
 
-          const image =
-            memory.dataset.image;
-
-          const text =
-            memory.dataset.text;
-
-
-          /*
-            Если это видео —
-            показываем его как видео.
-          */
-
-          if (
-            image.toLowerCase().endsWith('.mp4') ||
-            image.toLowerCase().endsWith('.webm') ||
-            image.toLowerCase().endsWith('.mov')
-          ) {
-
-            modalImage.style.display = 'none';
-
-            let video =
-              document.getElementById('modalVideo');
-
-            if (!video) {
-
-              video =
-                document.createElement('video');
-
-              video.id = 'modalVideo';
-
-              video.controls = true;
-              video.autoplay = true;
-              video.playsInline = true;
-
-              video.style.width = '100%';
-              video.style.maxHeight = '58vh';
-              video.style.borderRadius = '7px';
-
-              modalImage.parentNode.insertBefore(
-                video,
-                modalImage
-              );
-            }
-
-            video.style.display = 'block';
-            video.src = image;
-            video.load();
-            video.play().catch(() => {});
-
-          } else {
-
-            const video =
-              document.getElementById('modalVideo');
-
-            if (video) {
-              video.pause();
-              video.style.display = 'none';
-              video.removeAttribute('src');
-            }
-
-            modalImage.style.display = 'block';
-
-            modalImage.src = image;
-
-            modalImage.alt =
-              memory.querySelector('img').alt;
-          }
+            </div>
 
 
-          modalText.textContent = text;
+            <div class="form-group">
 
-          modal.classList.add('open');
+                <span class="form-label">
+                    Чем займёмся?
+                </span>
+
+                <div class="activities">
+
+                    <div class="activity">
+                        <input
+                            type="checkbox"
+                            id="movie"
+                            name="activity"
+                            value="Кино"
+                        >
+                        <label for="movie">
+                            Кино
+                        </label>
+                    </div>
+
+
+                    <div class="activity">
+                        <input
+                            type="checkbox"
+                            id="restaurant"
+                            name="activity"
+                            value="Ресторан"
+                        >
+                        <label for="restaurant">
+                            Ресторан
+                        </label>
+                    </div>
+
+
+                    <div class="activity">
+                        <input
+                            type="checkbox"
+                            id="walk"
+                            name="activity"
+                            value="Прогулка"
+                        >
+                        <label for="walk">
+                            Прогулка
+                        </label>
+                    </div>
+
+
+                    <div class="activity">
+                        <input
+                            type="checkbox"
+                            id="walking"
+                            name="activity"
+                            value="Гулять"
+                        >
+                        <label for="walking">
+                            Гулять
+                        </label>
+                    </div>
+
+
+                    <div class="activity">
+                        <input
+                            type="checkbox"
+                            id="theatre"
+                            name="activity"
+                            value="Театр"
+                        >
+                        <label for="theatre">
+                            Театр
+                        </label>
+                    </div>
+
+
+                    <div class="activity">
+                        <input
+                            type="checkbox"
+                            id="club"
+                            name="activity"
+                            value="Клуб"
+                        >
+                        <label for="club">
+                            Клуб
+                        </label>
+                    </div>
+
+
+                    <div class="activity">
+                        <input
+                            type="checkbox"
+                            id="karting"
+                            name="activity"
+                            value="Картинг"
+                        >
+                        <label for="karting">
+                            Картинг
+                        </label>
+                    </div>
+
+
+                    <div class="activity">
+                        <input
+                            type="checkbox"
+                            id="golf"
+                            name="activity"
+                            value="Мини-гольф"
+                        >
+                        <label for="golf">
+                            Мини-гольф
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-button"
+                id="submitButton"
+            >
+                Отправить
+            </button>
+
+
+            <div
+                class="form-message"
+                id="formMessage"
+            ></div>
+
+        </form>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+        Сделано с любовью ❤️
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        /* =====================================
+           MEMORY MODALS
+        ===================================== */
+
+        const memories = document.querySelectorAll(".memory");
+
+        const modal = document.getElementById("memoryModal");
+        const modalClose = document.getElementById("modalClose");
+
+        const modalTitle = document.getElementById("modalTitle");
+        const modalText = document.getElementById("modalText");
+
+        const modalMediaContainer =
+            document.getElementById("modalMediaContainer");
+
+
+        memories.forEach(memory => {
+
+            memory.addEventListener("click", () => {
+
+                const title =
+                    memory.dataset.title;
+
+                const image =
+                    memory.dataset.image;
+
+                const text =
+                    memory.dataset.text;
+
+
+                modalTitle.textContent = title;
+                modalText.textContent = text;
+
+
+                modalMediaContainer.innerHTML = "";
+
+
+                /*
+                    Если это MP4 —
+                    создаём video.
+                */
+
+                if (
+                    image.toLowerCase().endsWith(".mp4") ||
+                    image.toLowerCase().endsWith(".webm") ||
+                    image.toLowerCase().endsWith(".mov")
+                ) {
+
+                    const video =
+                        document.createElement("video");
+
+                    video.className = "modal-media";
+
+                    video.controls = true;
+
+                    video.autoplay = true;
+
+                    video.playsInline = true;
+
+                    video.src = image;
+
+                    modalMediaContainer.appendChild(video);
+
+                } else {
+
+                    const img =
+                        document.createElement("img");
+
+                    img.className = "modal-media";
+
+                    img.src = image;
+
+                    img.alt = title;
+
+                    modalMediaContainer.appendChild(img);
+
+                }
+
+
+                modal.classList.add("active");
+
+                document.body.style.overflow = "hidden";
+
+            });
 
         });
 
-      });
 
+        /* =====================================
+           CLOSE MODAL
+        ===================================== */
 
-    /* =========================
-       ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
-    ========================= */
+        function closeModal() {
 
-    const closeModal = () => {
+            modal.classList.remove("active");
 
-      modal.classList.remove('open');
+            document.body.style.overflow = "";
 
-      const video =
-        document.getElementById('modalVideo');
+            /*
+                Останавливаем видео,
+                когда закрываем окно.
+            */
 
-      if (video) {
-        video.pause();
-      }
+            const video =
+                modalMediaContainer.querySelector("video");
 
-    };
+            if (video) {
 
+                video.pause();
 
-    document
-      .querySelector('.close')
-      .addEventListener(
-        'click',
-        closeModal
-      );
+                video.src = "";
 
+            }
 
-    modal.addEventListener(
-      'click',
-      (event) => {
+            modalMediaContainer.innerHTML = "";
 
-        if (
-          event.target === modal
-        ) {
-          closeModal();
         }
 
-      }
-    );
+
+        modalClose.addEventListener(
+            "click",
+            closeModal
+        );
 
 
-    document.addEventListener(
-      'keydown',
-      (event) => {
+        modal.addEventListener(
+            "click",
+            event => {
 
-        if (
-          event.key === 'Escape'
-        ) {
-          closeModal();
-        }
+                if (event.target === modal) {
 
-      }
-    );
+                    closeModal();
 
+                }
 
-    /* =========================
-       ФОРМА
-    ========================= */
-
-    const form =
-      document.getElementById('inviteForm');
-
-    const submitButton =
-      document.getElementById('submitButton');
+            }
+        );
 
 
-    form.addEventListener(
-      'submit',
-      () => {
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (event.key === "Escape") {
+
+                    closeModal();
+
+                }
+
+            }
+        );
+
+
+        /* =====================================
+           BACKGROUND MUSIC
+        ===================================== */
+
+        const music =
+            document.getElementById("backgroundMusic");
+
 
         /*
-          FormSubmit получает обычный POST.
-          Ничего не блокируем.
+            Браузеры запрещают автоматический
+            запуск музыки до взаимодействия
+            пользователя со страницей.
+
+            Поэтому пробуем включить музыку
+            после первого клика.
         */
 
-        submitButton.disabled = true;
+        let musicStarted = false;
 
-        submitButton.textContent =
-          'Отправляем...';
 
-      }
-    );
+        document.addEventListener(
+            "click",
+            () => {
 
-  </script>
+                if (!musicStarted) {
+
+                    music.volume = 0.35;
+
+                    music.play()
+                        .then(() => {
+
+                            musicStarted = true;
+
+                        })
+                        .catch(() => {
+
+                            /*
+                                Safari / iOS может
+                                дополнительно заблокировать
+                                autoplay.
+                            */
+
+                        });
+
+                }
+
+            },
+            { once: false }
+        );
+
+
+        /* =====================================
+           FORM SUBMISSION
+        ===================================== */
+
+        const form =
+            document.getElementById("inviteForm");
+
+        const submitButton =
+            document.getElementById("submitButton");
+
+        const formMessage =
+            document.getElementById("formMessage");
+
+
+        form.addEventListener(
+            "submit",
+            async function(event) {
+
+                /*
+                    ОЧЕНЬ ВАЖНО:
+                    отменяем обычный submit.
+
+                    Поэтому Safari больше не будет
+                    открывать страницу formsubmit.co.
+                */
+
+                event.preventDefault();
+
+
+                formMessage.className =
+                    "form-message";
+
+                formMessage.textContent = "";
+
+
+                /*
+                    Получаем дату.
+                */
+
+                const date =
+                    document.getElementById("date").value;
+
+
+                /*
+                    Получаем выбранные активности.
+                */
+
+                const activities =
+                    Array.from(
+                        document.querySelectorAll(
+                            'input[name="activity"]:checked'
+                        )
+                    ).map(
+                        checkbox => checkbox.value
+                    );
+
+
+                /*
+                    Проверяем активности.
+                */
+
+                if (activities.length === 0) {
+
+                    formMessage.textContent =
+                        "Выбери хотя бы один вариант ❤️";
+
+                    formMessage.classList.add(
+                        "show",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                    Блокируем кнопку,
+                    чтобы случайно не отправить
+                    форму несколько раз.
+                */
+
+                submitButton.disabled = true;
+
+                submitButton.textContent =
+                    "Отправляем...";
+
+
+                /*
+                    Данные для FormSubmit.
+                */
+
+                const data = {
+
+                    _subject:
+                        "Приглашение — полгода дружбы",
+
+                    _template:
+                        "table",
+
+                    date:
+                        date,
+
+                    activity:
+                        activities.join(", ")
+
+                };
+
+
+                try {
+
+                    /*
+                        AJAX endpoint FormSubmit.
+
+                        Благодаря /ajax/
+                        браузер не переходит
+                        на страницу FormSubmit.
+                    */
+
+                    const response =
+                        await fetch(
+                            "https://formsubmit.co/ajax/kardin.stmw@gmail.com",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Accept":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(data)
+                            }
+                        );
+
+
+                    /*
+                        Получаем JSON ответ.
+                    */
+
+                    const result =
+                        await response.json();
+
+
+                    console.log(
+                        "FormSubmit response:",
+                        result
+                    );
+
+
+                    /*
+                        Проверяем HTTP статус.
+                    */
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Ошибка сервера"
+                        );
+
+                    }
+
+
+                    /*
+                        FormSubmit может вернуть
+                        success как boolean или строку.
+                    */
+
+                    if (
+                        result.success === false ||
+                        result.success === "false"
+                    ) {
+
+                        throw new Error(
+                            result.message ||
+                            "FormSubmit не принял форму"
+                        );
+
+                    }
+
+
+                    /*
+                        Успешно!
+
+                        Переходим на нашу страницу
+                        success.html.
+                    */
+
+                    window.location.href =
+                        "success.html";
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Form error:",
+                        error
+                    );
+
+
+                    /*
+                        Показываем ошибку
+                        пользователю.
+                    */
+
+                    formMessage.textContent =
+                        "Не получилось отправить заявку. Попробуй ещё раз ❤️";
+
+
+                    formMessage.classList.add(
+                        "show",
+                        "error"
+                    );
+
+
+                    /*
+                        Возвращаем кнопку.
+                    */
+
+                    submitButton.disabled = false;
+
+                    submitButton.textContent =
+                        "Отправить";
+
+                }
+
+            }
+        );
+
+    </script>
 
 </body>
 </html>
-```
