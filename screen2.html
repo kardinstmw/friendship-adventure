@@ -1,82 +1,474 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Карта приключений</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+
   <style>
-    :root { --cream:#f4efe6; --ink:#2e2a24; --soft:#6b6255; --line:#d4d0c7; --pink:#f4a8b7; }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { margin:0; color:var(--ink); background:var(--cream); font-family:'Poiret One',sans-serif; font-weight:600; }
-    button, input { font:inherit; }
-    .page { width:100%; max-width:420px; min-height:100vh; margin:auto; overflow:hidden; position:relative; }
-    .banner { width:100%; display:block; }
-    .intro { padding:58px 24px 18px; position:relative; min-height:230px; }
-    h1, h2, p { margin:0; }
-    h1 { max-width:225px; font-size:2rem; line-height:1.08; font-weight:400; }
-    .intro-note { width:125px; margin:12px 0 0; color:var(--soft); font-size:.93rem; line-height:1.2; }
-    .guide { position:absolute; right:18px; bottom:-4px; width:128px; text-align:center; line-height:.8; transform:rotate(-5deg); }
-    .guide img { display:block; width:200px; height:auto; margin:0 auto; }
-    .guide span { display:block; margin-top:14px; padding:8px; border:2px solid var(--ink); border-radius:8px; background:#fffdf7; font-size:.67rem; line-height:1.1; transform:rotate(7deg); }
-    .map { position:relative; min-height:890px; padding:75px 0 30px; }
-    .route { position:absolute; left:50%; top:20px; height:785px; transform:translateX(-50%); z-index:0; }
-    .memory { position:absolute; z-index:1; width:84px; height:84px; padding:4px; border:0; border-radius:50%; background:var(--cream); cursor:pointer; box-shadow:0 0 0 1px rgba(46,42,24,.13); transition:transform .2s ease, box-shadow .2s ease; }
-    .memory:hover, .memory:focus-visible { transform:scale(1.08); box-shadow:0 5px 16px rgba(46,42,24,.22); outline:none; }
-    .memory img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
-    .memory.one { top:58px; left:calc(50% - 28px); }
-    .memory.two { top:285px; left:calc(50% - 76px); }
-    .memory.three { top:525px; left:calc(50% - 42px); }
-    .memory.four { top:665px; left:calc(50% - 105px); }
-    .side-character { position:absolute; z-index:2; width:96px; height:auto; filter:drop-shadow(0 4px 0 rgba(46,42,24,.14)); user-select:none; }
-    .side-character.left-top { top:110px; left:-25px; transform:rotate(-18deg); }
-    .side-character.right-top { top:160px; right:-25px; transform:rotate(16deg); }
-    .side-character.left-bottom { top:480px; left:-22px; transform:rotate(12deg); }
-    .side-character.right-bottom { top:500px; right:-23px; transform:rotate(-10deg); }
-    .tap-hint { position:absolute; bottom:4px; left:50%; transform:translateX(-50%); color:var(--soft); font-size:.75rem; white-space:nowrap; }
-    .invite { padding:4px 16px 60px; text-align:center; }
-    h2 { font-size:1.75rem; font-weight:400; }
-    .subtitle { margin:7px 0 22px; color:var(--soft); font-size:.92rem; font-style:italic; }
-    form { text-align:left; }
-    .date-label { display:block; margin:0 0 8px; text-align:center; font-size:1rem; }
-    input[type="date"] { width:100%; min-height:58px; padding:12px 14px; border:1px solid var(--line); border-radius:6px; background:#fffdf9; color:var(--ink); font-size:1rem; }
-    .choice-title { margin:29px 0 13px; text-align:center; font-size:1rem; }
-    .choices { display:flex; flex-wrap:wrap; justify-content:center; gap:10px 12px; }
-    .choice input { position:absolute; opacity:0; }
-    .choice span { display:block; min-width:76px; padding:8px 12px; border:1px solid var(--line); border-radius:999px; text-align:center; font-size:.85rem; cursor:pointer; transition:background .2s, border-color .2s, transform .2s; }
-    .choice input:checked + span { border-color:var(--ink); background:var(--pink); transform:translateY(-2px); }
-    .submit { display:block; width:170px; margin:46px auto 0; padding:13px 20px; border:1px solid var(--ink); border-radius:999px; background:transparent; color:var(--ink); cursor:pointer; font-size:1rem; transition:background .2s,color .2s,transform .2s; }
-    .submit:hover { background:var(--ink); color:var(--cream); transform:translateY(-2px); }
-    .mail-note { margin-top:12px; color:var(--soft); text-align:center; font-size:.66rem; line-height:1.3; }
-    .modal { display:none; position:fixed; inset:0; z-index:10; padding:20px; align-items:center; justify-content:center; background:rgba(46,42,24,.68); }
-    .modal.open { display:flex; }
-    .modal-card { width:min(100%, 380px); max-height:90vh; overflow:auto; position:relative; padding:14px 14px 22px; border-radius:12px; background:var(--cream); text-align:center; }
-    .modal-image { display:block; width:100%; max-height:58vh; border-radius:7px; object-fit:contain; background:#dedede; }
-    .modal-text { margin:15px 12px 0; font-size:1.05rem; line-height:1.35; }
-    .close { position:absolute; top:20px; right:20px; width:34px; height:34px; border:1px solid var(--ink); border-radius:50%; background:var(--cream); color:var(--ink); cursor:pointer; font-size:1.3rem; }
+    :root {
+      --cream: #f4efe6;
+      --ink: #2e2a24;
+      --soft: #6b6255;
+      --line: #d4d0c7;
+      --pink: #f4a8b7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: 'Poiret One', sans-serif;
+      font-weight: 600;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 420px;
+      min-height: 100vh;
+      margin: auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .banner {
+      width: 100%;
+      display: block;
+    }
+
+    .intro {
+      padding: 58px 24px 18px;
+      position: relative;
+      min-height: 230px;
+    }
+
+    h1,
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 225px;
+      font-size: 2rem;
+      line-height: 1.08;
+      font-weight: 400;
+    }
+
+    .intro-note {
+      width: 125px;
+      margin: 12px 0 0;
+      color: var(--soft);
+      font-size: .93rem;
+      line-height: 1.2;
+    }
+
+    .guide {
+      position: absolute;
+      right: 18px;
+      bottom: -4px;
+      width: 128px;
+      text-align: center;
+      line-height: .8;
+      transform: rotate(-5deg);
+    }
+
+    .guide img {
+      display: block;
+      width: 200px;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .guide span {
+      display: block;
+      margin-top: 14px;
+      padding: 8px;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: #fffdf7;
+      font-size: .67rem;
+      line-height: 1.1;
+      transform: rotate(7deg);
+    }
+
+    .map {
+      position: relative;
+      min-height: 890px;
+      padding: 75px 0 30px;
+    }
+
+    .route {
+      position: absolute;
+      left: 50%;
+      top: 20px;
+      height: 785px;
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .memory {
+      position: absolute;
+      z-index: 1;
+      width: 84px;
+      height: 84px;
+      padding: 4px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--cream);
+      cursor: pointer;
+      box-shadow: 0 0 0 1px rgba(46, 42, 24, .13);
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .memory:hover,
+    .memory:focus-visible {
+      transform: scale(1.08);
+      box-shadow: 0 5px 16px rgba(46, 42, 24, .22);
+      outline: none;
+    }
+
+    .memory img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .memory.one {
+      top: 58px;
+      left: calc(50% - 28px);
+    }
+
+    .memory.two {
+      top: 285px;
+      left: calc(50% - 76px);
+    }
+
+    .memory.three {
+      top: 525px;
+      left: calc(50% - 42px);
+    }
+
+    .memory.four {
+      top: 665px;
+      left: calc(50% - 105px);
+    }
+
+    .side-character {
+      position: absolute;
+      z-index: 2;
+      width: 96px;
+      height: auto;
+      filter: drop-shadow(0 4px 0 rgba(46, 42, 24, .14));
+      user-select: none;
+    }
+
+    .side-character.left-top {
+      top: 110px;
+      left: -25px;
+      transform: rotate(-18deg);
+    }
+
+    .side-character.right-top {
+      top: 160px;
+      right: -25px;
+      transform: rotate(16deg);
+    }
+
+    .side-character.left-bottom {
+      top: 480px;
+      left: -22px;
+      transform: rotate(12deg);
+    }
+
+    .side-character.right-bottom {
+      top: 500px;
+      right: -23px;
+      transform: rotate(-10deg);
+    }
+
+    .tap-hint {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--soft);
+      font-size: .75rem;
+      white-space: nowrap;
+    }
+
+    .invite {
+      padding: 4px 16px 60px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 400;
+    }
+
+    .subtitle {
+      margin: 7px 0 22px;
+      color: var(--soft);
+      font-size: .92rem;
+      font-style: italic;
+    }
+
+    form {
+      text-align: left;
+    }
+
+    .date-label {
+      display: block;
+      margin: 0 0 8px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      min-height: 58px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fffdf9;
+      color: var(--ink);
+      font-size: 1rem;
+    }
+
+    .choice-title {
+      margin: 29px 0 13px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 12px;
+    }
+
+    .choice {
+      position: relative;
+    }
+
+    .choice input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choice span {
+      display: block;
+      min-width: 76px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      text-align: center;
+      font-size: .85rem;
+      cursor: pointer;
+      transition:
+        background .2s,
+        border-color .2s,
+        transform .2s;
+    }
+
+    .choice input:checked + span {
+      border-color: var(--ink);
+      background: var(--pink);
+      transform: translateY(-2px);
+    }
+
+    .submit {
+      display: block;
+      width: 170px;
+      margin: 46px auto 0;
+      padding: 13px 20px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 1rem;
+      transition:
+        background .2s,
+        color .2s,
+        transform .2s;
+    }
+
+    .submit:hover {
+      background: var(--ink);
+      color: var(--cream);
+      transform: translateY(-2px);
+    }
+
+    .submit:disabled {
+      opacity: .6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .mail-note {
+      margin-top: 12px;
+      color: var(--soft);
+      text-align: center;
+      font-size: .66rem;
+      line-height: 1.3;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      padding: 20px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(46, 42, 24, .68);
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(100%, 380px);
+      max-height: 90vh;
+      overflow: auto;
+      position: relative;
+      padding: 14px 14px 22px;
+      border-radius: 12px;
+      background: var(--cream);
+      text-align: center;
+    }
+
+    .modal-image {
+      display: block;
+      width: 100%;
+      max-height: 58vh;
+      border-radius: 7px;
+      object-fit: contain;
+      background: #dedede;
+    }
+
+    .modal-text {
+      margin: 15px 12px 0;
+      font-size: 1.05rem;
+      line-height: 1.35;
+      white-space: pre-line;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--ink);
+      border-radius: 50%;
+      background: var(--cream);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 1.3rem;
+      z-index: 2;
+    }
   </style>
 </head>
+
 <body>
+
   <main class="page">
-    <img class="banner" src="banner.png" alt="Давай вспомним моменты, которые запомнились">
+
+    <img
+      class="banner"
+      src="banner.png"
+      alt="Давай вспомним моменты, которые запомнились"
+    >
 
     <section class="intro">
-      <h1>Карта<br>Приключений</h1>
-      <p class="intro-note">Нажимай на фото — и вспоминай яркие моменты!</p>
-      <div class="guide" aria-hidden="true"><img src="crosh1.png" alt=""><span>Привет, я Крош путеводитель. Нажимай на фото, чтобы разблокировать приключение</span></div>
+
+      <h1>
+        Карта<br>
+        Приключений
+      </h1>
+
+      <p class="intro-note">
+        Нажимай на фото — и вспоминай яркие моменты!
+      </p>
+
+      <div class="guide" aria-hidden="true">
+        <img src="crosh1.png" alt="">
+        <span>
+          Привет, я Крош путеводитель.
+          Нажимай на фото, чтобы разблокировать приключение
+        </span>
+      </div>
+
     </section>
 
-    <section class="map" aria-label="Карта воспоминаний">
-      <img class="side-character left-top" src="photo1 1.png" alt="">
-      <img class="side-character right-top" src="photo2 1.png" alt="">
-      <img class="side-character left-bottom" src="photo4 1.png" alt="">
-      <img class="side-character right-bottom" src="Loading 1.png" alt="">
-      <img class="route" src="Line.png" alt="">
 
-      <!-- src — маленькое фото на карте; data-image — большое фото для окна. -->
-      <button class="memory one" type="button" data-image="1story 1.png" data-text="05.03.26
+    <section class="map" aria-label="Карта воспоминаний">
+
+      <img
+        class="side-character left-top"
+        src="photo1 1.png"
+        alt=""
+      >
+
+      <img
+        class="side-character right-top"
+        src="photo2 1.png"
+        alt=""
+      >
+
+      <img
+        class="side-character left-bottom"
+        src="photo4 1.png"
+        alt=""
+      >
+
+      <img
+        class="side-character right-bottom"
+        src="Loading 1.png"
+        alt=""
+      >
+
+      <img
+        class="route"
+        src="Line.png"
+        alt=""
+      >
+
+
+      <!-- ПЕРВОЕ ВОСПОМИНАНИЕ -->
+
+      <button
+        class="memory one"
+        type="button"
+        data-image="1story 1.png"
+        data-text="05.03.26
 
 Никогда бы не подумал, что случайный приезд в Смули Хез так обернётся и принесёт в мою жизнь такого человека.
 
@@ -84,8 +476,24 @@
 
 Столько всего произошло, что иногда самому сложно поверить, что всё это вместилось всего в полгода.
 
-Жаль лишь, что фотографирую я мало."><img src="258.png" alt="Первое воспоминание"></button>
-      <button class="memory two" type="button" data-image="story2.mp4" data-text="0Секретная доставка
+Жаль лишь, что фотографирую я мало."
+      >
+
+        <img
+          src="258.png"
+          alt="Первое воспоминание"
+        >
+
+      </button>
+
+
+      <!-- ВТОРОЕ ВОСПОМИНАНИЕ -->
+
+      <button
+        class="memory two"
+        type="button"
+        data-image="story2.mp4"
+        data-text="Секретная доставка
 
 Одна из главных авантюр за последние полгода — это, конечно же, секретная доставка киндеров в Ригу.
 
@@ -95,8 +503,24 @@
 
 И, кажется, именно с этого момента я понял, что ради некоторых вещей готов немного поиграть в детектива.
 
-А теперь небольшая улика, по которой этот дом вообще удалось найти…"><img src="259.png" alt="Второе воспоминание"></button>
-      <button class="memory three" type="button" data-image="story3 1.png" data-text="За эти полгода
+А теперь небольшая улика, по которой этот дом вообще удалось найти…"
+      >
+
+        <img
+          src="259.png"
+          alt="Второе воспоминание"
+        >
+
+      </button>
+
+
+      <!-- ТРЕТЬЕ ВОСПОМИНАНИЕ -->
+
+      <button
+        class="memory three"
+        type="button"
+        data-image="story3 1.png"
+        data-text="За эти полгода
 
 Ты, как любительница одного ушастого голубого зубастика, конечно же, имела его плюшевую версию. И чтобы ему было чуть веселее, мы дополнили твою коллекцию.
 
@@ -110,8 +534,24 @@
 
 Но самое незабываемое — это, конечно же, вышка, на которую мы катались аж два раза ради крутых фотографий рассвета.
 
-Кажется, если однажды найти место, откуда красиво встречать рассвет, то остановиться уже невозможно."><img src="260.png" alt="Третье воспоминание"></button>
-      <button class="memory four" type="button" data-image="story4 1.png" data-text="Крош и Ёжик
+Кажется, если однажды найти место, откуда красиво встречать рассвет, то остановиться уже невозможно."
+      >
+
+        <img
+          src="260.png"
+          alt="Третье воспоминание"
+        >
+
+      </button>
+
+
+      <!-- ЧЕТВЁРТОЕ ВОСПОМИНАНИЕ -->
+
+      <button
+        class="memory four"
+        type="button"
+        data-image="story4 1.png"
+        data-text="Крош и Ёжик
 
 Крош и Ёжик — те ещё путешественники и авантюристы.
 
@@ -125,80 +565,454 @@
 
 Но врач в 15:00 решил немного изменить наши планы и остановил нас от этой затеи.
 
-Но ничего. Ещё исправим."><img src="261.png" alt="Четвёртое воспоминание"></button>
-      <p class="tap-hint">Нажми на кружок с фото</p>
+Но ничего. Ещё исправим."
+      >
+
+        <img
+          src="261.png"
+          alt="Четвёртое воспоминание"
+        >
+
+      </button>
+
+
+      <p class="tap-hint">
+        Нажми на кружок с фото
+      </p>
+
     </section>
+
+
+    <!-- ФОРМА -->
 
     <section class="invite">
-      <h2>Полгода дружбы позади</h2>
-      <p class="subtitle">Пора это отметить!</p>
-      <form id="inviteForm" action="https://formsubmit.co/kardin.stmw@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="Новая заявка на встречу">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" id="successUrl" value="">
-        <label class="date-label" for="date">Выбери удобную дату</label>
-        <input id="date" name="date" type="date" required>
-        <p class="choice-title">Выбери предпочтения</p>
+
+      <h2>
+        Полгода дружбы позади
+      </h2>
+
+      <p class="subtitle">
+        Пора это отметить!
+      </p>
+
+
+      <form
+        id="inviteForm"
+        action="https://formsubmit.co/kardin.stmw@gmail.com"
+        method="POST"
+      >
+
+        <!-- Настройки FormSubmit -->
+
+        <input
+          type="hidden"
+          name="_subject"
+          value="Новая заявка на встречу"
+        >
+
+        <input
+          type="hidden"
+          name="_template"
+          value="table"
+        >
+
+        <input
+          type="hidden"
+          name="_captcha"
+          value="false"
+        >
+
+        <!--
+          После отправки FormSubmit перенаправит
+          на страницу success.html
+        -->
+
+        <input
+          type="hidden"
+          name="_next"
+          value="https://kardinstmw.github.io/friendship-adventure/success.html"
+        >
+
+
+        <label
+          class="date-label"
+          for="date"
+        >
+          Выбери удобную дату
+        </label>
+
+
+        <input
+          id="date"
+          name="date"
+          type="date"
+          required
+        >
+
+
+        <p class="choice-title">
+          Выбери предпочтения
+        </p>
+
+
         <div class="choices">
-          <label class="choice"><input type="checkbox" name="activity" value="Кино"><span>Кино</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Ресторан"><span>Ресторан</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Прогулка"><span>Прогулка</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Гулять"><span>Гулять</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Театр"><span>Театр</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Клуб"><span>Клуб</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Картинг"><span>Картинг</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Мини-гольф"><span>Мини-гольф</span></label>
+
+          <label class="choice">
+            <input
+              type="checkbox"
+              name="activity"
+              value="Кино"
+            >
+            <span>Кино</span>
+          </label>
+
+
+          <label class="choice">
+            <input
+              type="checkbox"
+              name="activity"
+              value="Ресторан"
+            >
+            <span>Ресторан</span>
+          </label>
+
+
+          <label class="choice">
+            <input
+              type="checkbox"
+              name="activity"
+              value="Прогулка"
+            >
+            <span>Прогулка</span>
+          </label>
+
+
+          <label class="choice">
+            <input
+              type="checkbox"
+              name="activity"
+              value="Гулять"
+            >
+            <span>Гулять</span>
+          </label>
+
+
+          <label class="choice">
+            <input
+              type="checkbox"
+              name="activity"
+              value="Театр"
+            >
+            <span>Театр</span>
+          </label>
+
+
+          <label class="choice">
+            <input
+              type="checkbox"
+              name="activity"
+              value="Клуб"
+            >
+            <span>Клуб</span>
+          </label>
+
+
+          <label class="choice">
+            <input
+              type="checkbox"
+              name="activity"
+              value="Картинг"
+            >
+            <span>Картинг</span>
+          </label>
+
+
+          <label class="choice">
+            <input
+              type="checkbox"
+              name="activity"
+              value="Мини-гольф"
+            >
+            <span>Мини-гольф</span>
+          </label>
+
         </div>
-        <button class="submit" type="submit">Отправить</button>
+
+
+        <button
+          class="submit"
+          type="submit"
+          id="submitButton"
+        >
+          Отправить
+        </button>
+
+
+        <p class="mail-note">
+          После отправки заявки ты попадёшь на страницу подтверждения.
+        </p>
+
       </form>
+
     </section>
+
   </main>
 
-  <div class="modal" id="memoryModal" role="dialog" aria-modal="true" aria-labelledby="modalText">
+
+  <!-- МОДАЛЬНОЕ ОКНО -->
+
+  <div
+    class="modal"
+    id="memoryModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalText"
+  >
+
     <div class="modal-card">
-      <button class="close" type="button" aria-label="Закрыть">×</button>
-      <img class="modal-image" id="modalImage" src="" alt="">
-      <p class="modal-text" id="modalText"></p>
+
+      <button
+        class="close"
+        type="button"
+        aria-label="Закрыть"
+      >
+        ×
+      </button>
+
+      <img
+        class="modal-image"
+        id="modalImage"
+        src=""
+        alt=""
+      >
+
+      <p
+        class="modal-text"
+        id="modalText"
+      ></p>
+
     </div>
+
   </div>
 
-  <!-- Добавьте второй музыкальный файл рядом со страницей под названием mus2.mp3. -->
-  <audio id="bgMusic" loop preload="auto"><source src="smeshariki_08.mp3" type="audio/mpeg"></audio>
+
+  <!-- МУЗЫКА -->
+
+  <audio
+    id="bgMusic"
+    loop
+    preload="auto"
+  >
+    <source
+      src="smeshariki_08.mp3"
+      type="audio/mpeg"
+    >
+  </audio>
+
 
   <script>
+
+    /* =========================
+       МУЗЫКА
+    ========================= */
+
     const music = document.getElementById('bgMusic');
-    const startMusic = () => music.play().catch(() => {});
-    // При переходе с первой страницы браузер обычно разрешает воспроизведение;
-    // если нет — музыка начнёт играть при первом касании страницы.
+
+    const startMusic = () => {
+      music.play().catch(() => {});
+    };
+
     window.addEventListener('load', startMusic);
-    document.addEventListener('pointerdown', startMusic, { once:true });
 
-    const modal = document.getElementById('memoryModal');
-    const modalImage = document.getElementById('modalImage');
-    const modalText = document.getElementById('modalText');
-    document.querySelectorAll('.memory').forEach((memory) => {
-      memory.addEventListener('click', () => {
-        modalImage.src = memory.dataset.image;
-        modalImage.alt = memory.querySelector('img').alt;
-        modalText.textContent = memory.dataset.text;
-        modal.classList.add('open');
-      });
-    });
-    const closeModal = () => modal.classList.remove('open');
-    document.querySelector('.close').addEventListener('click', closeModal);
-    modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
-    document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeModal(); });
+    document.addEventListener(
+      'pointerdown',
+      startMusic,
+      { once: true }
+    );
 
-    // FormSubmit требует абсолютный адрес страницы благодарности.
-    const form = document.getElementById('inviteForm');
-    if (window.location.protocol === 'file:') {
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        alert('Для отправки заявки откройте screen2.html через Live Server в VS Code.');
+
+    /* =========================
+       МОДАЛЬНЫЕ ВОСПОМИНАНИЯ
+    ========================= */
+
+    const modal =
+      document.getElementById('memoryModal');
+
+    const modalImage =
+      document.getElementById('modalImage');
+
+    const modalText =
+      document.getElementById('modalText');
+
+
+    document
+      .querySelectorAll('.memory')
+      .forEach((memory) => {
+
+        memory.addEventListener('click', () => {
+
+          const image =
+            memory.dataset.image;
+
+          const text =
+            memory.dataset.text;
+
+
+          /*
+            Если это видео —
+            показываем его как видео.
+          */
+
+          if (
+            image.toLowerCase().endsWith('.mp4') ||
+            image.toLowerCase().endsWith('.webm') ||
+            image.toLowerCase().endsWith('.mov')
+          ) {
+
+            modalImage.style.display = 'none';
+
+            let video =
+              document.getElementById('modalVideo');
+
+            if (!video) {
+
+              video =
+                document.createElement('video');
+
+              video.id = 'modalVideo';
+
+              video.controls = true;
+              video.autoplay = true;
+              video.playsInline = true;
+
+              video.style.width = '100%';
+              video.style.maxHeight = '58vh';
+              video.style.borderRadius = '7px';
+
+              modalImage.parentNode.insertBefore(
+                video,
+                modalImage
+              );
+            }
+
+            video.style.display = 'block';
+            video.src = image;
+            video.load();
+            video.play().catch(() => {});
+
+          } else {
+
+            const video =
+              document.getElementById('modalVideo');
+
+            if (video) {
+              video.pause();
+              video.style.display = 'none';
+              video.removeAttribute('src');
+            }
+
+            modalImage.style.display = 'block';
+
+            modalImage.src = image;
+
+            modalImage.alt =
+              memory.querySelector('img').alt;
+          }
+
+
+          modalText.textContent = text;
+
+          modal.classList.add('open');
+
+        });
+
       });
-    } else {
-      document.getElementById('successUrl').value = `${window.location.origin}${window.location.pathname.replace(/[^/]+$/, '')}success.html`;
-    }
+
+
+    /* =========================
+       ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
+    ========================= */
+
+    const closeModal = () => {
+
+      modal.classList.remove('open');
+
+      const video =
+        document.getElementById('modalVideo');
+
+      if (video) {
+        video.pause();
+      }
+
+    };
+
+
+    document
+      .querySelector('.close')
+      .addEventListener(
+        'click',
+        closeModal
+      );
+
+
+    modal.addEventListener(
+      'click',
+      (event) => {
+
+        if (
+          event.target === modal
+        ) {
+          closeModal();
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      'keydown',
+      (event) => {
+
+        if (
+          event.key === 'Escape'
+        ) {
+          closeModal();
+        }
+
+      }
+    );
+
+
+    /* =========================
+       ФОРМА
+    ========================= */
+
+    const form =
+      document.getElementById('inviteForm');
+
+    const submitButton =
+      document.getElementById('submitButton');
+
+
+    form.addEventListener(
+      'submit',
+      () => {
+
+        /*
+          FormSubmit получает обычный POST.
+          Ничего не блокируем.
+        */
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+          'Отправляем...';
+
+      }
+    );
+
   </script>
+
 </body>
 </html>
+```
