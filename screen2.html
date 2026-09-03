@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -54,29 +55,39 @@
     .modal.open { display:flex; }
     .modal-card { width:min(100%, 380px); max-height:90vh; overflow:auto; position:relative; padding:14px 14px 22px; border-radius:12px; background:var(--cream); text-align:center; }
     .modal-image { display:block; width:100%; max-height:58vh; border-radius:7px; object-fit:contain; background:#dedede; }
-    .modal-text { margin:15px 12px 0; font-size:1.05rem; line-height:1.35; }
+    .modal-text { margin:15px 12px 0; font-size:1.05rem; line-height:1.35; white-space:pre-line; }
     .close { position:absolute; top:20px; right:20px; width:34px; height:34px; border:1px solid var(--ink); border-radius:50%; background:var(--cream); color:var(--ink); cursor:pointer; font-size:1.3rem; }
   </style>
 </head>
+
 <body>
   <main class="page">
-    <img class="banner" src="banner.png" alt="Давай вспомним моменты, которые запомнились">
 
-    <section class="intro">
-      <h1>Карта<br>Приключений</h1>
-      <p class="intro-note">Нажимай на фото — и вспоминай яркие моменты!</p>
-      <div class="guide" aria-hidden="true"><img src="crosh1.png" alt=""><span>Привет, я Крош путеводитель. Нажимай на фото, чтобы разблокировать приключение</span></div>
-    </section>
+```
+<img class="banner" src="banner.png" alt="Давай вспомним моменты, которые запомнились">
 
-    <section class="map" aria-label="Карта воспоминаний">
-      <img class="side-character left-top" src="photo1 1.png" alt="">
-      <img class="side-character right-top" src="photo2 1.png" alt="">
-      <img class="side-character left-bottom" src="photo4 1.png" alt="">
-      <img class="side-character right-bottom" src="Loading 1.png" alt="">
-      <img class="route" src="Line.png" alt="">
+<section class="intro">
+  <h1>Карта<br>Приключений</h1>
+  <p class="intro-note">Нажимай на фото — и вспоминай яркие моменты!</p>
 
-      <!-- src — маленькое фото на карте; data-image — большое фото для окна. -->
-      <button class="memory one" type="button" data-image="1story 1.png" data-text="05.03.26
+  <div class="guide" aria-hidden="true">
+    <img src="crosh1.png" alt="">
+    <span>Привет, я Крош путеводитель. Нажимай на фото, чтобы разблокировать приключение</span>
+  </div>
+</section>
+
+<section class="map" aria-label="Карта воспоминаний">
+
+  <img class="side-character left-top" src="photo1 1.png" alt="">
+  <img class="side-character right-top" src="photo2 1.png" alt="">
+  <img class="side-character left-bottom" src="photo4 1.png" alt="">
+  <img class="side-character right-bottom" src="Loading 1.png" alt="">
+  <img class="route" src="Line.png" alt="">
+
+  <button class="memory one" type="button"
+    data-image="1story 1.png"
+    data-text="05.03.26
+```
 
 Никогда бы не подумал, что случайный приезд в Смули Хез так обернётся и принесёт в мою жизнь такого человека.
 
@@ -84,8 +95,13 @@
 
 Столько всего произошло, что иногда самому сложно поверить, что всё это вместилось всего в полгода.
 
-Жаль лишь, что фотографирую я мало."><img src="258.png" alt="Первое воспоминание"></button>
-      <button class="memory two" type="button" data-image="story2.mp4" data-text="0Секретная доставка
+Жаль лишь, что фотографирую я мало."> <img src="258.png" alt="Первое воспоминание"> </button>
+
+```
+  <button class="memory two" type="button"
+    data-image="story2.mp4"
+    data-text="Секретная доставка
+```
 
 Одна из главных авантюр за последние полгода — это, конечно же, секретная доставка киндеров в Ригу.
 
@@ -95,8 +111,13 @@
 
 И, кажется, именно с этого момента я понял, что ради некоторых вещей готов немного поиграть в детектива.
 
-А теперь небольшая улика, по которой этот дом вообще удалось найти…"><img src="259.png" alt="Второе воспоминание"></button>
-      <button class="memory three" type="button" data-image="story3 1.png" data-text="За эти полгода
+А теперь небольшая улика, по которой этот дом вообще удалось найти…"> <img src="259.png" alt="Второе воспоминание"> </button>
+
+```
+  <button class="memory three" type="button"
+    data-image="story3 1.png"
+    data-text="За эти полгода
+```
 
 Ты, как любительница одного ушастого голубого зубастика, конечно же, имела его плюшевую версию. И чтобы ему было чуть веселее, мы дополнили твою коллекцию.
 
@@ -110,8 +131,13 @@
 
 Но самое незабываемое — это, конечно же, вышка, на которую мы катались аж два раза ради крутых фотографий рассвета.
 
-Кажется, если однажды найти место, откуда красиво встречать рассвет, то остановиться уже невозможно."><img src="260.png" alt="Третье воспоминание"></button>
-      <button class="memory four" type="button" data-image="story4 1.png" data-text="Крош и Ёжик
+Кажется, если однажды найти место, откуда красиво встречать рассвет, то остановиться уже невозможно."> <img src="260.png" alt="Третье воспоминание"> </button>
+
+```
+  <button class="memory four" type="button"
+    data-image="story4 1.png"
+    data-text="Крош и Ёжик
+```
 
 Крош и Ёжик — те ещё путешественники и авантюристы.
 
@@ -125,33 +151,76 @@
 
 Но врач в 15:00 решил немного изменить наши планы и остановил нас от этой затеи.
 
-Но ничего. Ещё исправим."><img src="261.png" alt="Четвёртое воспоминание"></button>
-      <p class="tap-hint">Нажми на кружок с фото</p>
-    </section>
+Но ничего. Ещё исправим."> <img src="261.png" alt="Четвёртое воспоминание"> </button>
 
-    <section class="invite">
-      <h2>Полгода дружбы позади</h2>
-      <p class="subtitle">Пора это отметить!</p>
-      <form id="inviteForm" action="https://formsubmit.io/kardin.stmw@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="Новая заявка на встречу">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" value="https://kardinstmw.github.io/friendship-adventure/success.html">
-        <label class="date-label" for="date">Выбери удобную дату</label>
-        <input id="date" name="date" type="date" required>
-        <p class="choice-title">Выбери предпочтения</p>
-        <div class="choices">
-          <label class="choice"><input type="checkbox" name="activity" value="Кино"><span>Кино</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Ресторан"><span>Ресторан</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Прогулка"><span>Прогулка</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Гулять"><span>Гулять</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Театр"><span>Театр</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Клуб"><span>Клуб</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Картинг"><span>Картинг</span></label>
-          <label class="choice"><input type="checkbox" name="activity" value="Мини-гольф"><span>Мини-гольф</span></label>
-        </div>
-        <button class="submit" type="submit">Отправить</button>
-      </form>
-    </section>
+```
+  <p class="tap-hint">Нажми на кружок с фото</p>
+</section>
+
+<section class="invite">
+  <h2>Полгода дружбы позади</h2>
+  <p class="subtitle">Пора это отметить!</p>
+
+  <form id="inviteForm">
+
+    <label class="date-label" for="date">
+      Выбери удобную дату
+    </label>
+
+    <input id="date" name="date" type="date" required>
+
+    <p class="choice-title">Выбери предпочтения</p>
+
+    <div class="choices">
+      <label class="choice">
+        <input type="checkbox" name="activity" value="Кино">
+        <span>Кино</span>
+      </label>
+
+      <label class="choice">
+        <input type="checkbox" name="activity" value="Ресторан">
+        <span>Ресторан</span>
+      </label>
+
+      <label class="choice">
+        <input type="checkbox" name="activity" value="Прогулка">
+        <span>Прогулка</span>
+      </label>
+
+      <label class="choice">
+        <input type="checkbox" name="activity" value="Гулять">
+        <span>Гулять</span>
+      </label>
+
+      <label class="choice">
+        <input type="checkbox" name="activity" value="Театр">
+        <span>Театр</span>
+      </label>
+
+      <label class="choice">
+        <input type="checkbox" name="activity" value="Клуб">
+        <span>Клуб</span>
+      </label>
+
+      <label class="choice">
+        <input type="checkbox" name="activity" value="Картинг">
+        <span>Картинг</span>
+      </label>
+
+      <label class="choice">
+        <input type="checkbox" name="activity" value="Мини-гольф">
+        <span>Мини-гольф</span>
+      </label>
+    </div>
+
+    <button class="submit" type="submit">
+      Отправить
+    </button>
+
+  </form>
+</section>
+```
+
   </main>
 
   <div class="modal" id="memoryModal" role="dialog" aria-modal="true" aria-labelledby="modalText">
@@ -162,33 +231,116 @@
     </div>
   </div>
 
-  <!-- Добавьте второй музыкальный файл рядом со страницей под названием mus2.mp3. -->
-  <audio id="bgMusic" loop preload="auto"><source src="smeshariki_08.mp3" type="audio/mpeg"></audio>
+  <audio id="bgMusic" loop preload="auto">
+    <source src="smeshariki_08.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
+    /* =========================
+       МУЗЫКА
+    ========================= */
+
     const music = document.getElementById('bgMusic');
-    const startMusic = () => music.play().catch(() => {});
-    // При переходе с первой страницы браузер обычно разрешает воспроизведение;
-    // если нет — музыка начнёт играть при первом касании страницы.
+
+    const startMusic = () => {
+      music.play().catch(() => {});
+    };
+
     window.addEventListener('load', startMusic);
     document.addEventListener('pointerdown', startMusic, { once:true });
+
+
+    /* =========================
+       ОКНО ВОСПОМИНАНИЙ
+    ========================= */
 
     const modal = document.getElementById('memoryModal');
     const modalImage = document.getElementById('modalImage');
     const modalText = document.getElementById('modalText');
+
     document.querySelectorAll('.memory').forEach((memory) => {
+
       memory.addEventListener('click', () => {
+
         modalImage.src = memory.dataset.image;
         modalImage.alt = memory.querySelector('img').alt;
         modalText.textContent = memory.dataset.text;
+
         modal.classList.add('open');
+
       });
+
     });
-    const closeModal = () => modal.classList.remove('open');
+
+    const closeModal = () => {
+      modal.classList.remove('open');
+    };
+
     document.querySelector('.close').addEventListener('click', closeModal);
-    modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
-    document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeModal(); });
+
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+
+    /* =========================
+       SMS
+    ========================= */
+
+    const inviteForm = document.getElementById('inviteForm');
+
+    inviteForm.addEventListener('submit', (event) => {
+
+      event.preventDefault();
+
+      const dateInput = document.getElementById('date');
+
+      const selectedActivities = Array.from(
+        document.querySelectorAll('input[name="activity"]:checked')
+      ).map((input) => input.value);
+
+      /* Преобразуем дату из YYYY-MM-DD в DD.MM.YYYY */
+
+      let formattedDate = 'Не выбрана';
+
+      if (dateInput.value) {
+
+        const [year, month, day] = dateInput.value.split('-');
+
+        formattedDate = `${day}.${month}.${year}`;
+
+      }
+
+      /* Формируем текст SMS */
+
+      const message =
+`🗺 Карта приключений
+
+📅 Дата: ${formattedDate}
+
+❤️ Предпочтения:
+${selectedActivities.length > 0
+  ? selectedActivities.join(', ')
+  : 'Не выбраны'}`;
+
+      /* Открываем SMS */
+
+      const smsUrl =
+        `sms:+37258046504?body=${encodeURIComponent(message)}`;
+
+      window.location.href = smsUrl;
+
+    });
 
   </script>
+
 </body>
 </html>
