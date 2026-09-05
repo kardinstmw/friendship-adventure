@@ -189,29 +189,19 @@
 
       <label class="choice">
         <input type="checkbox" name="activity" value="Гулять">
-        <span>Гулять</span>
-      </label>
-
-      <label class="choice">
-        <input type="checkbox" name="activity" value="Театр">
         <span>Театр</span>
       </label>
 
       <label class="choice">
+        <input type="checkbox" name="activity" value="Театр">
+        <span>Рига</span>
+      </label>
+
+      <label class="choice">
         <input type="checkbox" name="activity" value="Клуб">
-        <span>Клуб</span>
+        <span>Сюрпиз</span>
       </label>
 
-      <label class="choice">
-        <input type="checkbox" name="activity" value="Картинг">
-        <span>Картинг</span>
-      </label>
-
-      <label class="choice">
-        <input type="checkbox" name="activity" value="Мини-гольф">
-        <span>Мини-гольф</span>
-      </label>
-    </div>
 
     <button class="submit" type="submit">
       Отправить
@@ -334,7 +324,7 @@ ${selectedActivities.length > 0
       /* Открываем SMS */
 
       const smsUrl =
-        `sms:+37258046504?body=${encodeURIComponent(message)}`;
+        `sms:+37256959491?body=${encodeURIComponent(message)}`;
 
       window.location.href = smsUrl;
 
